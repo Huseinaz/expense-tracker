@@ -71,6 +71,7 @@ function add(transactionData) {
 
   // Close the popup after adding the transaction
   closePopup();
+  calculateTotal();
 }
 
 // Event listener for the form submission
@@ -101,6 +102,7 @@ function populateTableFromStorage() {
 function deleteRow(row) {
   row.remove();
   localStorage.setItem("tableHtml", document.querySelector("table").outerHTML);
+  calculateTotal();
 }
 
 // Event listener for the delete button
@@ -151,7 +153,78 @@ function filterData() {
 
 
 
+
+function calculateTotal() {
+  var total = 0;
+  var table = document.querySelector("table");
+  var rows = table.querySelectorAll("tr");
+
+  rows.forEach(function (row) {
+    var typeCell = row.querySelector("td:nth-child(1)");
+    var currencyCell = row.querySelector("td:nth-child(4)");
+    var amountCell = row.querySelector("td:nth-child(3)");
+
+    if (typeCell && currencyCell && amountCell) {
+      var rowData = {
+        type: typeCell.textContent.trim().toLowerCase(),
+        currency: currencyCell.textContent.trim().toUpperCase(),
+        amount: parseFloat(amountCell.textContent.trim()),
+      };
+
+      if (rowData.type === "incomes") {
+        if (rowData.currency === "USD") {
+          total += rowData.amount;
+          document.getElementById("output").textContent =
+            "Total: " + total.toFixed(2) + " USD";
+        } else {
+          axios
+            .post("https://rich-erin-angler-hem.cyclic.app/students/convert", {
+              from: rowData.currency,
+              to: "USD",
+              amount: rowData.amount,
+            })
+            .then(function (response) {
+              console.log(response);
+              total += response.data;
+              document.getElementById("output").textContent =
+                "Total: " + total.toFixed(2) + " USD";
+            })
+            .catch(function (error) {
+              console.error("Error exchanging currency:", error);
+            });
+        }
+      }
+      if (rowData.type === "expenses") {
+        if (rowData.currency === "USD") {
+          total -= rowData.amount;
+          document.getElementById("output").textContent =
+            "Total: " + total.toFixed(2) + " USD";
+        } else {
+          axios
+            .post("https://rich-erin-angler-hem.cyclic.app/students/convert", {
+              from: rowData.currency,
+              to: "USD",
+              amount: rowData.amount,
+            })
+            .then(function (response) {
+              console.log("Converted amount:", response.data);
+              console.log("Total after conversion:", total);
+              total -= response.data;
+              console.log("Total after conversion:", total);
+              document.getElementById("output").textContent =
+                "Total: " + total.toFixed(2) + " USD";
+            })
+            .catch(function (error) {
+              console.error("Error exchanging currency:", error);
+            });
+        }
+      }
+    }
+  });
+}
+
 window.onload = function () {
   populateTableFromStorage();
+  calculateTotal();
 };
 
