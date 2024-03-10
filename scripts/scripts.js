@@ -3,9 +3,8 @@ axios
   .get("https://rich-erin-angler-hem.cyclic.app/students/available")
   .then(function (response) {
     var currencies = response.data;
-    var currencySelect = document.getElementById("currency");
+    var currencySelect = document.getElementById("currencyAdd");
     var currencyFilterSelect = document.getElementById("currencyFilter");
-    
 
     currencies.forEach(function (currency) {
       var option1 = document.createElement("option");
@@ -68,7 +67,7 @@ function add(transactionData) {
   localStorage.setItem("tableHtml", table.outerHTML);
 
   // Reset the form fields
-  document.getElementById('expenseForm').reset();
+  document.getElementById("expenseForm").reset();
 
   // Close the popup after adding the transaction
   closePopup();
@@ -96,62 +95,63 @@ function populateTableFromStorage() {
   }
 }
 
-// Populate the table when the page loads
-window.onload = function () {
-  populateTableFromStorage();
-};
+
 
 // Function to delete a row from the table and localStorage
 function deleteRow(row) {
-  // Remove the row from the table
   row.remove();
-
-  // Save the updated HTML content of the table to localStorage
   localStorage.setItem("tableHtml", document.querySelector("table").outerHTML);
 }
 
 // Event listener for the delete button
 document.addEventListener("click", function (event) {
   if (event.target.classList.contains("delete-button")) {
-    // Get the parent row of the delete button
     var row = event.target.parentNode.parentNode;
-
-    // Delete the row from the table and localStorage
     deleteRow(row);
   }
 });
 
-document.getElementById("type").addEventListener("change", filterData);
-document.getElementById("currency").addEventListener("change", filterData);
+document.getElementById("typeFilter").addEventListener("change", filterData);
+document.getElementById("currencyFilter").addEventListener("change", filterData);
 document.getElementById("fromAmount").addEventListener("input", filterData);
 document.getElementById("toAmount").addEventListener("input", filterData);
 
-
 function filterData() {
-    var table = document.querySelector("table");
-    var rows = table.querySelectorAll("tr");
+  var typeFilter = document.getElementById("typeFilter").value.toLowerCase();
+  var currencyFilter = document.getElementById("currencyFilter").value.toUpperCase();
+  var fromAmountFilter = parseFloat(document.getElementById("fromAmount").value);
+  var toAmountFilter = parseFloat(document.getElementById("toAmount").value);
 
-    rows.forEach(function(row) {
-        var typeCell = row.querySelector("td:nth-child(1)");
-        var currencyCell = row.querySelector("td:nth-child(4)");
-        var amountCell = row.querySelector("td:nth-child(3)");
+  var table = document.querySelector("table");
+  var rows = table.querySelectorAll("tr");
 
-        // Retrieve filter values from input fields
-        var selectedType = document.getElementById("type").value.toLowerCase();
-        var selectedCurrency = document.getElementById("currency").value.toUpperCase();
-        var fromAmount = parseFloat(document.getElementById("fromAmount").value);
-        var toAmount = parseFloat(document.getElementById("toAmount").value);
+  rows.forEach(function(row) {
+      // Check if all required cells exist in the row
+      var typeCell = row.querySelector("td:nth-child(1)");
+      var nameCell = row.querySelector("td:nth-child(2)");
+      var amountCell = row.querySelector("td:nth-child(3)");
+      var currencyCell = row.querySelector("td:nth-child(4)");
 
-        // Check each input field for null value and apply filter accordingly
-        if ((!selectedType || typeCell.textContent.toLowerCase() === selectedType) &&
-            (!selectedCurrency || currencyCell.textContent.toUpperCase() === selectedCurrency) &&
-            (isNaN(fromAmount) || parseFloat(amountCell.textContent) >= fromAmount) &&
-            (isNaN(toAmount) || parseFloat(amountCell.textContent) <= toAmount)) {
-            row.style.display = "";
-        } else {
-            row.style.display = "none";
-        }
-    });
+      if (typeCell && nameCell && amountCell && currencyCell) {
+          var type = typeCell.textContent.toLowerCase();
+          var currency = currencyCell.textContent.toUpperCase();
+          var amount = parseFloat(amountCell.textContent);
+
+          if ((!typeFilter || type === typeFilter) &&
+              (!currencyFilter || currency === currencyFilter) &&
+              (isNaN(fromAmountFilter) || amount >= fromAmountFilter) &&
+              (isNaN(toAmountFilter) || amount <= toAmountFilter)) {
+              row.style.display = ""; // Show row if it matches filters
+          } else {
+              row.style.display = "none"; // Hide row if it doesn't match filters
+          }
+      }
+  });
 }
-  
+
+
+
+window.onload = function () {
+  populateTableFromStorage();
+};
 
