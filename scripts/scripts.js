@@ -1,6 +1,6 @@
 // Axios request to fetch currency data
 axios
-  .get("https://rich-erin-angler-hem.cyclic.app/students/available")
+  .get("https://dull-pink-sockeye-tie.cyclic.app/students/available")
   .then(function (response) {
     var currencies = response.data;
     var currencySelect = document.getElementById("currencyAdd");
@@ -181,7 +181,7 @@ function calculateTotal() {
             "Total: " + total.toFixed(2) + " USD";
         } else {
           axios
-            .post("https://rich-erin-angler-hem.cyclic.app/students/convert", {
+            .post("https://dull-pink-sockeye-tie.cyclic.app/students/convert", {
               from: rowData.currency,
               to: "USD",
               amount: rowData.amount,
@@ -204,7 +204,7 @@ function calculateTotal() {
             "Total: " + total.toFixed(2) + " USD";
         } else {
           axios
-            .post("https://rich-erin-angler-hem.cyclic.app/students/convert", {
+            .post("https://dull-pink-sockeye-tie.cyclic.app/students/convert", {
               from: rowData.currency,
               to: "USD",
               amount: rowData.amount,
@@ -225,6 +225,34 @@ function calculateTotal() {
     }
   });
 }
+
+// Function to open the popup form with data from the selected row
+function openPopupWithRowData(row) {
+  var cells = row.querySelectorAll("td");
+  var entryType = cells[0].textContent.trim().toLowerCase();
+  var name = cells[1].textContent.trim();
+  var amount = cells[2].textContent.trim();
+  var currency = cells[3].textContent.trim().toUpperCase();
+
+  // Populate the form fields with row data
+  document.getElementById("entryType").value = entryType;
+  document.getElementById("name").value = name;
+  document.getElementById("amount").value = amount;
+  document.getElementById("currencyAdd").value = currency;
+
+  // Display the popup form
+  openPopup();
+}
+
+// Add event listeners to all edit buttons
+document.addEventListener("click", function (event) {
+  if (event.target.classList.contains("edit-button")) {
+    // Get the parent row of the clicked button
+    var row = event.target.parentNode.parentNode;
+    openPopupWithRowData(row);
+    deleteRow(row);
+  }
+});
 
 window.onload = function () {
   populateTableFromStorage();
