@@ -1,4 +1,3 @@
-// Axios request to fetch currency data
 axios
   .get("https://dull-pink-sockeye-tie.cyclic.app/students/available")
   .then(function (response) {
@@ -22,28 +21,23 @@ axios
     console.error("Error fetching currency data:", error);
   });
 
-// Function to open the popup form
 function openPopup() {
   document.getElementById("popupForm").style.display = "block";
 }
 
-// Function to close the popup form
 function closePopup() {
   document.getElementById("popupForm").style.display = "none";
 }
 
 function add(transactionData) {
-  // Create a new table row for the added transaction
   var newRow = document.createElement("tr");
 
-  // Create table cells for each data point
   Object.values(transactionData).forEach((value) => {
     var cell = document.createElement("td");
     cell.textContent = value;
     newRow.appendChild(cell);
   });
 
-  // Create action buttons cell
   var actionsCell = document.createElement("td");
   var editButton = document.createElement("button");
   editButton.textContent = "Edit";
@@ -52,29 +46,22 @@ function add(transactionData) {
   deleteButton.textContent = "Delete";
   deleteButton.classList.add("button", "delete-button");
 
-  // Append buttons to actions cell
   actionsCell.appendChild(editButton);
   actionsCell.appendChild(deleteButton);
 
-  // Append the actions cell to the new row
   newRow.appendChild(actionsCell);
 
-  // Append the new row to the table
   var table = document.querySelector("table");
   table.appendChild(newRow);
 
-  // Save the HTML content of the table to localStorage
   localStorage.setItem("tableHtml", table.outerHTML);
 
-  // Reset the form fields
   document.getElementById("expenseForm").reset();
 
-  // Close the popup after adding the transaction
   closePopup();
   calculateTotal();
 }
 
-// Event listener for the form submission
 document
   .getElementById("expenseForm")
   .addEventListener("submit", function (event) {
@@ -87,7 +74,6 @@ document
     add(transactionData);
   });
 
-// Function to populate the table with data from localStorage
 function populateTableFromStorage() {
   var tableHtml = localStorage.getItem("tableHtml");
   if (tableHtml) {
@@ -96,14 +82,12 @@ function populateTableFromStorage() {
   }
 }
 
-// Function to delete a row from the table and localStorage
 function deleteRow(row) {
   row.remove();
   localStorage.setItem("tableHtml", document.querySelector("table").outerHTML);
   calculateTotal();
 }
 
-// Event listener for the delete button
 document.addEventListener("click", function (event) {
   if (event.target.classList.contains("delete-button")) {
     var row = event.target.parentNode.parentNode;
@@ -132,7 +116,6 @@ function filterData() {
   var rows = table.querySelectorAll("tr");
 
   rows.forEach(function (row) {
-    // Check if all required cells exist in the row
     var typeCell = row.querySelector("td:nth-child(1)");
     var nameCell = row.querySelector("td:nth-child(2)");
     var amountCell = row.querySelector("td:nth-child(3)");
@@ -149,9 +132,9 @@ function filterData() {
         (isNaN(fromAmountFilter) || amount >= fromAmountFilter) &&
         (isNaN(toAmountFilter) || amount <= toAmountFilter)
       ) {
-        row.style.display = ""; // Show row if it matches filters
+        row.style.display = "";
       } else {
-        row.style.display = "none"; // Hide row if it doesn't match filters
+        row.style.display = "none";
       }
     }
   });
@@ -187,7 +170,6 @@ function calculateTotal() {
               amount: rowData.amount,
             })
             .then(function (response) {
-              console.log(response);
               total += response.data;
               document.getElementById("output").textContent =
                 "Total: " + total.toFixed(2) + " USD";
@@ -210,10 +192,7 @@ function calculateTotal() {
               amount: rowData.amount,
             })
             .then(function (response) {
-              console.log("Converted amount:", response.data);
-              console.log("Total after conversion:", total);
               total -= response.data;
-              console.log("Total after conversion:", total);
               document.getElementById("output").textContent =
                 "Total: " + total.toFixed(2) + " USD";
             })
@@ -226,7 +205,6 @@ function calculateTotal() {
   });
 }
 
-// Function to open the popup form with data from the selected row
 function openPopupWithRowData(row) {
   var cells = row.querySelectorAll("td");
   var entryType = cells[0].textContent.trim().toLowerCase();
@@ -234,20 +212,16 @@ function openPopupWithRowData(row) {
   var amount = cells[2].textContent.trim();
   var currency = cells[3].textContent.trim().toUpperCase();
 
-  // Populate the form fields with row data
   document.getElementById("entryType").value = entryType;
   document.getElementById("name").value = name;
   document.getElementById("amount").value = amount;
   document.getElementById("currencyAdd").value = currency;
 
-  // Display the popup form
   openPopup();
 }
 
-// Add event listeners to all edit buttons
 document.addEventListener("click", function (event) {
   if (event.target.classList.contains("edit-button")) {
-    // Get the parent row of the clicked button
     var row = event.target.parentNode.parentNode;
     openPopupWithRowData(row);
     deleteRow(row);
