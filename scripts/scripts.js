@@ -96,8 +96,6 @@ function populateTableFromStorage() {
   }
 }
 
-
-
 // Function to delete a row from the table and localStorage
 function deleteRow(row) {
   row.remove();
@@ -114,45 +112,50 @@ document.addEventListener("click", function (event) {
 });
 
 document.getElementById("typeFilter").addEventListener("change", filterData);
-document.getElementById("currencyFilter").addEventListener("change", filterData);
+document
+  .getElementById("currencyFilter")
+  .addEventListener("change", filterData);
 document.getElementById("fromAmount").addEventListener("input", filterData);
 document.getElementById("toAmount").addEventListener("input", filterData);
 
 function filterData() {
   var typeFilter = document.getElementById("typeFilter").value.toLowerCase();
-  var currencyFilter = document.getElementById("currencyFilter").value.toUpperCase();
-  var fromAmountFilter = parseFloat(document.getElementById("fromAmount").value);
+  var currencyFilter = document
+    .getElementById("currencyFilter")
+    .value.toUpperCase();
+  var fromAmountFilter = parseFloat(
+    document.getElementById("fromAmount").value
+  );
   var toAmountFilter = parseFloat(document.getElementById("toAmount").value);
 
   var table = document.querySelector("table");
   var rows = table.querySelectorAll("tr");
 
-  rows.forEach(function(row) {
-      // Check if all required cells exist in the row
-      var typeCell = row.querySelector("td:nth-child(1)");
-      var nameCell = row.querySelector("td:nth-child(2)");
-      var amountCell = row.querySelector("td:nth-child(3)");
-      var currencyCell = row.querySelector("td:nth-child(4)");
+  rows.forEach(function (row) {
+    // Check if all required cells exist in the row
+    var typeCell = row.querySelector("td:nth-child(1)");
+    var nameCell = row.querySelector("td:nth-child(2)");
+    var amountCell = row.querySelector("td:nth-child(3)");
+    var currencyCell = row.querySelector("td:nth-child(4)");
 
-      if (typeCell && nameCell && amountCell && currencyCell) {
-          var type = typeCell.textContent.toLowerCase();
-          var currency = currencyCell.textContent.toUpperCase();
-          var amount = parseFloat(amountCell.textContent);
+    if (typeCell && nameCell && amountCell && currencyCell) {
+      var type = typeCell.textContent.toLowerCase();
+      var currency = currencyCell.textContent.toUpperCase();
+      var amount = parseFloat(amountCell.textContent);
 
-          if ((!typeFilter || type === typeFilter) &&
-              (!currencyFilter || currency === currencyFilter) &&
-              (isNaN(fromAmountFilter) || amount >= fromAmountFilter) &&
-              (isNaN(toAmountFilter) || amount <= toAmountFilter)) {
-              row.style.display = ""; // Show row if it matches filters
-          } else {
-              row.style.display = "none"; // Hide row if it doesn't match filters
-          }
+      if (
+        (!typeFilter || type === typeFilter) &&
+        (!currencyFilter || currency === currencyFilter) &&
+        (isNaN(fromAmountFilter) || amount >= fromAmountFilter) &&
+        (isNaN(toAmountFilter) || amount <= toAmountFilter)
+      ) {
+        row.style.display = ""; // Show row if it matches filters
+      } else {
+        row.style.display = "none"; // Hide row if it doesn't match filters
       }
+    }
   });
 }
-
-
-
 
 function calculateTotal() {
   var total = 0;
@@ -227,4 +230,3 @@ window.onload = function () {
   populateTableFromStorage();
   calculateTotal();
 };
-

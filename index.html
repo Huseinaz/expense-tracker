@@ -7,67 +7,17 @@
     <title>Post Form Data Example</title>
   </head>
   <body>
-    <h1>Expense Tracker</h1>
-    <!-- <form id="converterForm">
-      <label for="fromCurrency">From:</label>
-      <input
-        type="text"
-        id="fromCurrency"
-        name="fromCurrency"
-        value="EUR"
-      /><br /><br />
-      <label for="toCurrency">To:</label>
-      <input
-        type="text"
-        id="toCurrency"
-        name="toCurrency"
-        value="USD"
-      /><br /><br />
-      <label for="amount">Amount:</label>
-      <input type="number" id="amount" name="amount" /><br /><br />
-      <button type="button" onclick="convertCurrency()">Convert</button>
-    </form> -->
-
-    <div class="header">
-      <button class="button add-button" onclick="openPopup()">Add</button>
-      
-      <div>
-        <p id="output"></p>
-      </div>
+    <div class="title">
+      <h1>Expense Tracker</h1>
     </div>
-
-    <div class="filters">
-      <form action="" id="filters">
-        <div class="filter">
-          <label for="typeFilter">Type:</label>
-          <select id="typeFilter" name="type">
-            <option value="">All</option>
-            <option value="expenses">Expenses</option>
-            <option value="incomes">Income</option>
-          </select>
-          
-          <label for="currencyFilter">Currency:</label>
-          <select id="currencyFilter" name="currency">
-            <option value="">Select</option>
-          </select>
-          
-          <label for="fromAmount">From Amount:</label>
-          <input type="number" id="fromAmount" name="fromAmount" placeholder="From Amount" />
-          
-          <label for="toAmount">To Amount:</label>
-          <input type="number" id="toAmount" name="toAmount" placeholder="To Amount" />
-        </div>
-      </form>
-    </div>
-    
 
     <!-- Popup Form -->
     <div class="popup" id="popupForm">
       <div class="popup-content">
         <span class="close" onclick="closePopup()">&times;</span>
-        <h2>Add Expense</h2>
+        <h2>Add</h2>
         <form id="expenseForm">
-          <label for="entryType">Entry Type:</label>
+          <label for="entryType">Entry:</label>
           <select id="entryType" name="entryType" required>
             <option value="Incomes">Incomes</option>
             <option value="Expenses">Expenses</option></select
@@ -78,14 +28,57 @@
           <input type="number" id="amount" name="amount" required /><br /><br />
           <label for="currencyAdd">Currency:</label>
           <select id="currencyAdd" name="currency">
-            <option >Select Currency</option>
-          </select><br /><br />
-          <button type="submit">Add</button>
+            <option>Select Currency</option></select
+          ><br /><br />
+          <button type="submit" class="button add-button">Add</button>
         </form>
       </div>
     </div>
 
     <div class="container">
+      <div class="filters">
+        <form action="" id="filters">
+          <div class="filter">
+            <div>
+              <label for="typeFilter">Type:</label>
+              <select id="typeFilter" name="type">
+                <option value="">All</option>
+                <option value="expenses">Expenses</option>
+                <option value="incomes">Income</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="currencyFilter">Currency:</label>
+              <select id="currencyFilter" name="currency">
+                <option value="">Select</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="fromAmount">From Amount:</label>
+              <input
+                type="number"
+                id="fromAmount"
+                name="fromAmount"
+                placeholder="From Amount"
+              />
+            </div>
+
+            <div>
+              <label for="toAmount">To Amount:</label>
+              <input
+                type="number"
+                id="toAmount"
+                name="toAmount"
+                placeholder="To Amount"
+              />
+            </div>
+            
+            <p id="output" class="output"></p>
+          </div>
+        </form>
+      </div>
       <table>
         <tr>
           <th>Entry Type</th>
@@ -94,7 +87,7 @@
           <th>Currency</th>
           <th>Actions</th>
         </tr>
-        
+
         <!-- <tr>
           <td>Expenses/Incomes</td>
           <td>Food</td>
@@ -106,6 +99,7 @@
           </td>
         </tr> -->
       </table>
+      <button class="button add-button" onclick="openPopup()">Add</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
